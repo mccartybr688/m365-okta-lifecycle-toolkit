@@ -40,6 +40,8 @@ If one step fails, the rest still run. The failure shows up in red and in the lo
 ./scripts/Invoke-Offboarding.ps1 -CsvPath ./samples/departures.csv -ConfigPath ./config/roles.example.json -DryRun -RetireDevices
 ```
 
+`-WhatIf` works too and does the same thing as `-DryRun`. Both scripts support PowerShell's standard `SupportsShouldProcess`.
+
 Sample dry-run output:
 
 ```

@@ -13,7 +13,7 @@
       6. Assigns any direct licenses listed for the role.
       7. Creates the Okta user and adds the role's Okta groups (unless -SkipOkta).
 
-    Run with -DryRun first. Dry run needs no tenant connection and prints
+    Run with -DryRun or (or -WhatIf, which does the same thing) first. Dry run needs no tenant connection and prints
     every step it would take.
 
 .EXAMPLE
@@ -21,8 +21,11 @@
 
 .EXAMPLE
     ./scripts/Invoke-Onboarding.ps1 -CsvPath ./new-hires.csv -ConfigPath ./config/roles.json -SkipOkta
+
+.EXAMPLE
+    ./scripts/Invoke-Onboarding.ps1 -CsvPath ./samples/new-hires.csv -ConfigPath ./config/roles.example.json -WhatIf
 #>
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess)]
 param(
     [Parameter(Mandatory)][string]$CsvPath,
     [Parameter(Mandatory)][string]$ConfigPath,
@@ -34,6 +37,7 @@ param(
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot '..' 'src' 'LifecycleToolkit.psm1') -Force
 
+$DryRun = $DryRun -or $WhatIfPreference
 Initialize-LifecycleRun -DryRun:$DryRun
 $config = Get-LifecycleConfig -Path $ConfigPath
 $defaults = $config.Defaults

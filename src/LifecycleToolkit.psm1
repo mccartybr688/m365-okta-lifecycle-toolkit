@@ -88,7 +88,7 @@ function Save-LifecycleLog {
     if ($folder -and -not (Test-Path $folder)) {
         New-Item -ItemType Directory -Path $folder -Force | Out-Null
     }
-    $script:LogRows | Export-Csv -Path $Path -NoTypeInformation -Encoding utf8
+    $script:LogRows | Export-Csv -Path $Path -Encoding utf8
     Write-Host "Log saved to $Path"
 }
 

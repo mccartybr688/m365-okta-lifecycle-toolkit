@@ -20,15 +20,18 @@
     Steps are logged one by one. If a step fails, the rest still run and the
     failure shows up in the log.
 
-    Run with -DryRun first. Dry run needs no tenant connection.
+    Run with -DryRun or (or -WhatIf, which does the same thing) first. Dry run needs no tenant connection.
 
 .EXAMPLE
     ./scripts/Invoke-Offboarding.ps1 -CsvPath ./samples/departures.csv -ConfigPath ./config/roles.example.json -DryRun
 
 .EXAMPLE
     ./scripts/Invoke-Offboarding.ps1 -CsvPath ./departures.csv -ConfigPath ./config/roles.json -RetireDevices
+
+.EXAMPLE
+    ./scripts/Invoke-Offboarding.ps1 -CsvPath ./samples/departures.csv -ConfigPath ./config/roles.example.json -WhatIf
 #>
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess)]
 param(
     [Parameter(Mandatory)][string]$CsvPath,
     [Parameter(Mandatory)][string]$ConfigPath,
@@ -42,6 +45,7 @@ param(
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot '..' 'src' 'LifecycleToolkit.psm1') -Force
 
+$DryRun = $DryRun -or $WhatIfPreference
 Initialize-LifecycleRun -DryRun:$DryRun
 $config = Get-LifecycleConfig -Path $ConfigPath
 $defaults = $config.Defaults
@@ -212,7 +216,7 @@ foreach ($row in $departures) {
 if ($membershipRows.Count -gt 0) {
     if (-not (Test-Path $LogFolder)) { New-Item -ItemType Directory -Path $LogFolder -Force | Out-Null }
     $membershipPath = Join-Path $LogFolder "offboarding-memberships-$stamp.csv"
-    $membershipRows | Export-Csv -Path $membershipPath -NoTypeInformation -Encoding utf8
+    $membershipRows | Export-Csv -Path $membershipPath -Encoding utf8
     Write-Host "Group memberships saved to $membershipPath"
 }
 
