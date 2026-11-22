@@ -1,0 +1,4 @@
+FirstName,LastName,Department,JobTitle,Role,ManagerUpn,StartDate,PersonalEmail
+Avery,Johnson,Information Technology,Systems Administrator,IT,jordan.lee@contoso.com,2026-12-01,avery.j@example.com
+José,O'Brien,Finance,Staff Accountant,Finance,morgan.price@contoso.com,2026-12-01,jose.ob@example.com
+Taylor,Nguyen,Sales,Account Executive,Sales,casey.rivera@contoso.com,2026-12-08,taylor.n@example.com

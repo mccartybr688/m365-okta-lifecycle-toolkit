@@ -1,0 +1,36 @@
+{
+  "Defaults": {
+    "Domain": "contoso.com",
+    "UsageLocation": "US",
+    "CompanyName": "Contoso",
+    "ForceChangePasswordNextSignIn": true,
+    "OffboardingAutoReply": "Thank you for your message. {DisplayName} is no longer with {CompanyName}. Please contact {ManagerEmail} for assistance."
+  },
+  "Roles": {
+    "AllStaff": {
+      "EntraGroups": ["SG-All-Staff", "SG-MFA-Required", "SG-Intune-Windows-Baseline"],
+      "OktaGroups": ["Everyone-Apps"],
+      "LicenseSkus": []
+    },
+    "IT": {
+      "EntraGroups": ["SG-IT", "SG-License-M365-E3"],
+      "OktaGroups": ["IT", "Admin-Tools"],
+      "LicenseSkus": []
+    },
+    "Finance": {
+      "EntraGroups": ["SG-Finance", "SG-License-M365-E3"],
+      "OktaGroups": ["Finance", "ERP-Users"],
+      "LicenseSkus": []
+    },
+    "Sales": {
+      "EntraGroups": ["SG-Sales", "SG-License-M365-BusinessPremium"],
+      "OktaGroups": ["Sales", "CRM-Users"],
+      "LicenseSkus": []
+    },
+    "Contractor": {
+      "EntraGroups": ["SG-Contractors"],
+      "OktaGroups": ["Contractors"],
+      "LicenseSkus": ["EXCHANGESTANDARD"]
+    }
+  }
+}

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M365 + Okta Lifecycle Toolkit</title>
+<meta name="description" content="PowerShell onboarding and offboarding automation for Microsoft Entra ID, Exchange Online, Intune and Okta, with dry runs and step-by-step logs.">
+<style>
+  :root {
+    --bg: #f7f8fa; --panel: #ffffff; --text: #1b1f24; --muted: #5a6472;
+    --line: #e2e6ec; --accent: #2457c5; --code-bg: #0f1724; --code-text: #d7e1f0;
+    --planned: #4fb3d9; --done: #4cc38a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f131a; --panel: #161b24; --text: #e6e9ee; --muted: #9aa4b2;
+      --line: #263040; --accent: #7aa2ff; --code-bg: #0a0e14; --code-text: #d7e1f0;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f131a; --panel: #161b24; --text: #e6e9ee; --muted: #9aa4b2;
+    --line: #263040; --accent: #7aa2ff; --code-bg: #0a0e14; --code-text: #d7e1f0;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 900px; margin: 0 auto; padding: 48px 16px 64px; }
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+  h2 { font-size: 1.25rem; margin: 40px 0 12px; }
+  p.lead { color: var(--muted); font-size: 1.1rem; margin: 0 0 24px; }
+  a { color: var(--accent); }
+  .buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 10px 16px; border-radius: 8px; text-decoration: none;
+         border: 1px solid var(--line); background: var(--panel); color: var(--text); font-weight: 600; }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+  .card h3 { margin: 0 0 8px; font-size: 1.05rem; }
+  .card ol { margin: 0; padding-left: 20px; color: var(--muted); }
+  .card li { margin: 4px 0; }
+  pre { background: var(--code-bg); color: var(--code-text); border-radius: 12px; padding: 16px;
+        overflow-x: auto; font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; margin: 0; }
+  .tag-p { color: var(--planned); } .tag-d { color: var(--done); }
+  ul.plain { padding-left: 20px; color: var(--muted); }
+  .note { border-left: 3px solid var(--accent); padding: 8px 16px; background: var(--panel);
+          border-radius: 0 8px 8px 0; color: var(--muted); }
+  footer { margin-top: 48px; color: var(--muted); font-size: 0.9rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>M365 + Okta Lifecycle Toolkit</h1>
+  <p class="lead">PowerShell scripts that onboard and offboard users across Microsoft Entra ID, Exchange Online, Intune and Okta from a CSV, with a dry run before every change and a log of every step.</p>
+  <div class="buttons">
+    <a class="btn primary" href="https://github.com/mccartybr688/m365-okta-lifecycle-toolkit">View on GitHub</a>
+    <a class="btn" href="https://github.com/mccartybr688/m365-okta-lifecycle-toolkit#quick-start-no-tenant-needed">Try the dry run</a>
+  </div>
+
+  <h2>Why</h2>
+  <p>Most access problems start at onboarding and offboarding: new hires waiting for apps on day one, and people who have left still holding access weeks later. These scripts run the same steps, in the same order, for every user, and keep a record of what was done.</p>
+
+  <h2>What it does</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Onboarding</h3>
+      <ol>
+        <li>Map role to groups and licenses</li>
+        <li>Build a clean, unique UPN</li>
+        <li>Create the Entra ID user with a temporary password</li>
+        <li>Set the manager</li>
+        <li>Add role groups (group-based licensing)</li>
+        <li>Create the Okta user and add Okta groups</li>
+        <li>Show a one-time hand-off table</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Offboarding</h3>
+      <ol>
+        <li>Save group memberships for audit</li>
+        <li>Block sign-in and reset the password</li>
+        <li>Revoke sessions</li>
+        <li>Convert the mailbox to shared, add an auto-reply</li>
+        <li>Remove groups, then licenses</li>
+        <li>Retire Intune devices</li>
+        <li>Clear Okta sessions and deactivate the user</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>Dry run output</h2>
+  <pre><span class="tag-p">[DRY RUN] Planned</span>  sam.carter@contoso.com - Save group memberships to memberships CSV
+<span class="tag-p">[DRY RUN] Planned</span>  sam.carter@contoso.com - Block sign-in
+<span class="tag-p">[DRY RUN] Planned</span>  sam.carter@contoso.com - Reset password (random, not logged)
+<span class="tag-p">[DRY RUN] Planned</span>  sam.carter@contoso.com - Revoke sign-in sessions
+<span class="tag-p">[DRY RUN] Planned</span>  sam.carter@contoso.com - Convert mailbox to shared
+<span class="tag-p">[DRY RUN] Planned</span>  sam.carter@contoso.com - Grant manager mailbox access jordan.lee@contoso.com
+<span class="tag-p">[DRY RUN] Planned</span>  sam.carter@contoso.com - Set auto-reply
+<span class="tag-p">[DRY RUN] Planned</span>  sam.carter@contoso.com - Remove from all assigned Entra groups
+<span class="tag-p">[DRY RUN] Planned</span>  sam.carter@contoso.com - Remove direct licenses after mailbox is shared
+<span class="tag-p">[DRY RUN] Planned</span>  sam.carter@contoso.com - Retire Intune devices
+<span class="tag-p">[DRY RUN] Planned</span>  sam.carter@contoso.com - Clear Okta sessions
+<span class="tag-p">[DRY RUN] Planned</span>  sam.carter@contoso.com - Deactivate Okta user (deprovisions assigned apps)</pre>
+
+  <h2>Design choices</h2>
+  <ul class="plain">
+    <li><strong>Dry run first.</strong> Every tenant change goes through one function, so a dry run can't change anything.</li>
+    <li><strong>Order matters.</strong> Sign-in is blocked and sessions revoked first; licenses come off only after the mailbox is shared.</li>
+    <li><strong>Keep going on errors.</strong> A failed step is logged in red and the rest of the offboarding still runs.</li>
+    <li><strong>No secrets on disk.</strong> Okta tokens come from environment variables; temporary passwords are shown once and never logged.</li>
+  </ul>
+
+  <h2>About</h2>
+  <p class="note">I built this from scratch as a personal project, with help from Claude, based on the onboarding and offboarding work I've done as a senior systems administrator. It contains no employer code or data; all sample names are made up.</p>
+
+  <footer>Bryan McCarty · <a href="https://www.linkedin.com/in/bryan-mccarty-78535891">LinkedIn</a> · MIT License</footer>
+</main>
+</body>
+</html>
